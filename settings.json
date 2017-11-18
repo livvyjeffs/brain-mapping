@@ -1,0 +1,7 @@
+{
+  "galaxy.meteor.com": {
+     "env": {
+       "MONGO_URL": "mongodb://user:user@ds113606.mlab.com:13606/brain-mapping"
+     }
+   }
+}
