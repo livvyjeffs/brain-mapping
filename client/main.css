@@ -143,3 +143,14 @@ header .hide-completed {
 .hidden{
   display: none;
 }
+
+.selected_matches, .unselected_matches{
+  display: inline-block;
+}
+
+.selected_matches .match_item{
+  border-radius: 2px;
+  border: 1px solid green;
+  padding: 3px 5px;
+  margin-right: 3px;
+}

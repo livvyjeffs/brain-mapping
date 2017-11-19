@@ -1,36 +1,53 @@
 <body>
 
-   <div class="iframe_container">
-      <iframe class="article_iframe" src="http://www.sciencedirect.com/journal/neuron"></iframe>
-    </div>
+ <div class="iframe_container">
+  <iframe class="article_iframe" src="http://www.sciencedirect.com/journal/neuron"></iframe>
+</div>
 
-  <div class="article_container">
+<div class="article_container">
   <header>
-      <h1>Article List</h1>
-      <form class="new-search">
-        <input type="text" name="url" placeholder="Enter the URL" />
-      </form>
-      <form class="new-article hidden">
-        <input type="text" name="title" placeholder="Article title?" />
-        <input type="text" name="brain_region" placeholder="What is the brain region? (add article multiple times for multiple regions)" />
-        <input type="text" name="parent_region" placeholder="(optional) Is there a parent region?" />
-        <input type="text" name="nomenclature" placeholder="What is the region nomenclature?" />
-        <input type="text" name="species" placeholder="Brain species?" />
-        <input type="text" name="genetic_variant" placeholder="(optional) Genetic Variant of Species?" />
-        <input type="text" name="investigated_function" placeholder="What is the investigated function?" />
-        <input type="submit">
-      </form>
-    </header>
-    <ul>
-      {{#each articles}}
-        {{> article}}
+    <h1>Article List</h1>
+    <form class="new-search">
+
+
+
+      <input type="text" name="url" placeholder="Enter the URL" />
+    </form>
+    <form class="new-article hidden">
+      {{#each input_fields}}
+      <div class="input_container">
+        {{> input_field}}
+        <div class="matching">
+          <div class="selected_matches hidden"></div>
+          <div class="unselected_matches hidden">
+            {{#each matching_fields}}
+            {{> matching_field}}
+            {{/each}}
+          </div>
+        </div>
+      </div>
       {{/each}}
-    </ul>
-  </div>
+      <input type="submit">
+    </form>
+  </header>
+  <ul>
+    {{#each articles}}
+      {{> article}}
+    {{/each}}
+  </ul>
+</div>
 
 
 </body>
- 
+
+<template name="input_field">
+  <input type="text" name="{{name}}" placeholder="{{placeholder}}" />
+</template>
+
+<template name="matching_field">
+  <span class="match_item">{{name}}</span>
+</template>
+
 <template name="article">
-  <li>{{brain_region}}, {{investigated_function}}, <a href="{{url}}">{{study_title}}</a></li>
+  <li>{{brain_region}}, {{phenomena}}, <a href="{{url}}">{{title}}</a></li>
 </template>
