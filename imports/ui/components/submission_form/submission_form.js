@@ -306,42 +306,79 @@ function absorbData(values){
 
   if(values.title.matching){
     //if matching an existing article
+    Articles.update(values.title.id,
+    {
+      $addToSet: {
+        url: [values.url.name],
+        brain_region: [{
+          name: values.brain_region.name,
+          id: values.brain_region.id,
+          parent_region: values.parent_region.name,
+          type: 'brain_region',
+        }],
+        nomenclature: [{
+          name: values.nomenclature.name,
+          id: values.nomenclature.id,
+        }],
+        phenomena: [{
+          name: values.phenomena.name,
+          id: values.phenomena.id,
+        }],
+        species: [{
+          name: values.species.name,
+          id: values.species.id,
+          genetic_variant: values.genetic_variant.name,
+          type: 'species',
+        }],
+        investigators: [{
+          name: values.investigator.name,
+          id: values.investigator.id,
+        }],
+        institution: [{
+          name: values.institution.name,
+          id: values.institution.id,
+        }],
+      }
+    });
+  }else{
+    //else create new article
+    Articles.insert({
+      url: [values.url.name],
+      name: values.title.name,
+      title: values.title.name,
+      brain_region: [{
+        name: values.brain_region.name,
+        id: values.brain_region.id,
+        parent_region: values.parent_region.name,
+        type: 'brain_region',
+      }],
+      nomenclature: [{
+        name: values.nomenclature.name,
+        id: values.nomenclature.id,
+      }],
+      phenomena: [{
+        name: values.phenomena.name,
+        id: values.phenomena.id,
+      }],
+      species: [{
+        name: values.species.name,
+        id: values.species.id,
+        genetic_variant: values.genetic_variant.name,
+        type: 'species',
+      }],
+      investigators: [{
+        name: values.investigator.name,
+        id: values.investigator.id,
+      }],
+      institution: [{
+        name: values.institution.name,
+        id: values.institution.id,
+      }],
+      createdAt: new Date(),
+    });
   }
 
-  Articles.insert({
-    url: values.url.name,
-    name: values.title.name,
-    title: values.title.name,
-    brain_region: {
-      name: values.brain_region.name,
-      id: values.brain_region.id,
-      parent_region: values.parent_region.name,
-      type: 'brain_region',
-    },
-    nomenclature: {
-      name: values.nomenclature.name,
-      id: values.nomenclature.id,
-    },
-    phenomena: {
-      name: values.phenomena.name,
-      id: values.phenomena.id,
-    },
-    species: {
-      name: values.species.name,
-      id: values.species.id,
-      genetic_variant: values.genetic_variant.name,
-      type: 'species',
-    },
-    investigators: {
-      name: values.investigator.name,
-      id: values.investigator.id,
-    },
-    institution: {
-      name: values.institution.name,
-      id: values.institution.id,
-    },
-    createdAt: new Date(),
-  });
+  
 
   // Articles.update({
   //   query: { name: values.title },
