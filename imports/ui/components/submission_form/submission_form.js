@@ -309,35 +309,35 @@ function absorbData(values){
     Articles.update(values.title.id,
     {
       $addToSet: {
-        url: [values.url.name],
-        brain_region: [{
+        url: values.url.name,
+        brain_region: {
           name: values.brain_region.name,
           id: values.brain_region.id,
           parent_region: values.parent_region.name,
           type: 'brain_region',
-        }],
-        nomenclature: [{
+        },
+        nomenclature: {
           name: values.nomenclature.name,
           id: values.nomenclature.id,
-        }],
-        phenomena: [{
+        },
+        phenomena: {
           name: values.phenomena.name,
           id: values.phenomena.id,
-        }],
-        species: [{
+        },
+        species: {
           name: values.species.name,
           id: values.species.id,
           genetic_variant: values.genetic_variant.name,
           type: 'species',
-        }],
-        investigators: [{
+        },
+        investigators: {
           name: values.investigator.name,
           id: values.investigator.id,
-        }],
-        institution: [{
+        },
+        institution: {
           name: values.institution.name,
           id: values.institution.id,
-        }],
+        },
       }
     });
   }else{
