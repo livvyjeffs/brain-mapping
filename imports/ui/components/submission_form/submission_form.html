@@ -7,7 +7,7 @@
 			</div>
 		</form>
 		<!-- removed class hidden for debugging -->
-		<form class="new-article">
+		<form class="new-article hidden">
 			{{#each input_fields}}
 			{{> input_field}}
 			{{/each}}
@@ -25,14 +25,4 @@
 			</div>
 		</div>
 	</div>
-</template>
-
-<!-- below, not in use -->
-
-<template name="matching_field">
-	
-</template>
-
-<template name="matching_item">
-	<span class="match_item">{{name}}</span>
 </template>
