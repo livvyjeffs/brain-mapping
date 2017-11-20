@@ -1,19 +1,33 @@
 <template name="list_viewer">
-  <ul>
-    {{#each articles}}
-    {{> article}}
-    {{/each}}
-  </ul>
+	<table>
+		<tr>
+			<th>Brain Regions</th>
+			<th>Phenomena</th>
+			<th>Research Paper</th>
+		</tr>
+		{{#each articles}}
+		{{> article}}
+		{{/each}}
+	</table>
+	
 </template>
 
 <template name="article">
-  <li>{{display_brain_region}}, {{display_phenomena}}, <a href="{{url}}">{{title}}</a></li>
+	<tr>
+		<td>{{> brain_regionList brain_region}}</td>
+		<td>{{> phenomenaList phenomena}}</td>
+		<td><a href="{{url}}">{{title}}</a></td>
+	</tr>
 </template>
 
-<template name="brain_region">
-	
+<template name="brain_regionList">
+	{{#each this}}
+	{{name}}<br>
+	{{/each}}
 </template>
 
-<template name="phenomena">
-	
+<template name="phenomenaList">
+	{{#each this}}
+	{{name}}<br>
+	{{/each}}
 </template>

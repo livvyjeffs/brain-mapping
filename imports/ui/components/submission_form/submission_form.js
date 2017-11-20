@@ -338,12 +338,7 @@ function absorbData(values){
           name: values.institution.name,
           id: values.institution.id,
         },
-      }, 
-      $set: {
-        //changes the display value to most recent
-        display_brain_region: values.brain_region.name,
-        display_phenomena: values.phenomena.name,
-      }     
+      }    
     });
   }else{
     //else create new article
@@ -351,7 +346,6 @@ function absorbData(values){
       url: [values.url.name],
       name: values.title.name,
       title: values.title.name,
-      brain_regions: values.brain_region.name,
       brain_region: [{
         name: values.brain_region.name,
         id: values.brain_region.id,
@@ -362,7 +356,6 @@ function absorbData(values){
         name: values.nomenclature.name,
         id: values.nomenclature.id,
       }],
-      phenomenas: values.phenomena.name,
       phenomena: [{
         name: values.phenomena.name,
         id: values.phenomena.id,

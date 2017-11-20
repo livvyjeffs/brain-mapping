@@ -53,10 +53,18 @@ form input:focus{
   outline: 0;
 }
 
-ul {
+ul, table {
+  width: 100%;
   margin: 0;
-  padding: 0;
   background: white;
+}
+
+th, td{
+  padding: 10px;
+}
+
+tr{
+  border-bottom: 1px solid gray;
 }
 
 .delete {
