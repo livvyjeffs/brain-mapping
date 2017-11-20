@@ -6,7 +6,8 @@
 				<input type="text" name="url" placeholder="Enter the URL" />
 			</div>
 		</form>
-		<form class="new-article hidden">
+		<!-- removed class hidden for debugging -->
+		<form class="new-article">
 			{{#each input_fields}}
 			{{> input_field}}
 			{{/each}}
@@ -18,9 +19,9 @@
 <template name="input_field">
 	<div class="input_container" name={{name}}>
 		<input type="text" name="{{name}}" placeholder="{{placeholder}}" />
-		<div class="matching" name={{name}}>
-			<div class="selected_matches hidden" name={{name}}></div>
-			<div class="unselected_matches hidden">
+		<div class="matching_field hidden" name={{name}}>
+			<div class="selected_matches"></div>
+			<div class="unselected_matches">
 			</div>
 		</div>
 	</div>

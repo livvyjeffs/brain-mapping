@@ -148,35 +148,49 @@ Template.submission_form.events({
     // Prevent default browser form submit
     event.preventDefault();
 
-    // Get value from form element
     const target = event.target;
-    
-    //when a key is pressed, search the input for appropriate matches
-    
-    const matches = findMatches(target.name, target.value);
+    const val = target.value;
+    const type = target.name;
+    const matching_field = $('.matching_field[name='+type+']');
+
+    displayMatches(matching_field, val);
 
   },
 
-  "click .match_item": function(event, template) {
+  "click .matching_item": function(event, template) {
+
+    // Prevent default browser form submit
     event.preventDefault();
-  // Session.set('affiliation_parent', AffiliationList.findOne({name: getSelectedValue(event)}))
 
   //define object targets according to html code
   const target = event.target;
-  const input_container = target.parentNode.parentNode.parentNode;
+  const matching_item = $(target);
+  const matching_container = matching_item.parentsUntil('form','.input_container');
+  const matching_field = matching_container.find('.matching_field');
+  const input_field = matching_container.find(':input');
+  const unselected_matches = matching_field.find('.unselected_matches');
+  const selected_matches = matching_field.find('.selected_matches');
 
-  //move the item from unselected to selected and empty other options
-  const matched_item = $(target).text();
-  $(target).remove();
-  $(input_container).find('.unselected_matches').empty();
-  $(input_container).find('.selected_matches').removeClass('hidden').append("<span class='match_item'>"+matched_item+"<span>");
-  $(input_container).find('.unselected_matches').addClass('hidden'); 
+  //remove the element from unselected and move to selected
+  selected_matches.append(matching_item.remove());
+  
+  //search for no matches
+  console.log(input_field);
+  input_field.val('');
+  displayMatches(matching_field, input_field.val());
 
-  //bind selected item to appropriate db
-  //example: users.update({_id : "Jack"},{$set:{age : 13, username : "Jack"}});
+  // //move the item from unselected to selected and empty other options
+  // const matched_item = $(target).text();
+  // $(target).remove();
+  // $(input_container).find('.unselected_matches').empty();
+  // $(input_container).find('.selected_matches').removeClass('hidden').append("<span class='match_item'>"+matched_item+"<span>");
+  // $(input_container).find('.unselected_matches').addClass('hidden'); 
 
-  //clear input
-  $(input_container).find(':input').val('');
+  // //bind selected item to appropriate db
+  // //example: users.update({_id : "Jack"},{$set:{age : 13, username : "Jack"}});
+
+  // //clear input
+  // $(input_container).find(':input').val('');
 
 },
 
@@ -192,47 +206,85 @@ function findMatches(type, queryValue){
 
   switch (type) {
     case 'url':
-        //search ARTICLE db for matching URL
-        //if found, auto fill title, connect to ARTICLE.title
-        return Articles.find({ url: { $regex: queryValue, $options: 'i' } }).fetch();
-        break;
-        case 'title':
-        //if blank, search ARTICLE db for matching title
-        //if found, connect to ARTICLE.title
-        return Articles.find({ title: { $regex: queryValue, $options: 'i' } }).fetch();
-        break;
-        case 'brain_region':
-        //search REGION db for matching region
-        //if found, connect to ARTICLE db
-        //if not found, create new REGION
-        return Regions.find({ name: { $regex: queryValue, $options: 'i' } }).fetch();
-        break;
-        case 'parent_region':
-        //search REGION db for matching region
-        //if found, connect to REGION as parent relationship
-        //if not found, connect to REGION as parent AND create new REGION
-        return Regions.find({ name: { $regex: queryValue, $options: 'i' } }).fetch();
-        break;
-        case 'nomenclature':
-        return Nomenclatures.find({ name: { $regex: queryValue, $options: 'i' } }).fetch();
-        //search NOMENCLATURE db for matching (hard coded, manually updated)
-        break;
-        case 'species':
-        return Species.find({ name: { $regex: queryValue, $options: 'i' } }).fetch();
-        break;
-        case 'genetic_variant':
-        return Species.find({ genetic_variant: { $regex: queryValue, $options: 'i' } }).fetch();
-        break;
-        case 'phenomena':
-        return Phenomena.find({ name: { $regex: queryValue, $options: 'i' } }).fetch();
-        break;
-        case 'investigator': 
-        return Investigators.find({ name: { $regex: queryValue, $options: 'i' } }).fetch();
-        break;
-        case 'institution':
-        return Institutions.find({ name: { $regex: queryValue, $options: 'i' } }).fetch();
-        break;
+    //search ARTICLE db for matching URL
+    //if found, auto fill title, connect to ARTICLE.title
+    return Articles.find({ url: { $regex: queryValue, $options: 'i' } }).fetch();
+    break;
+    case 'title':
+    //if blank, search ARTICLE db for matching title
+    //if found, connect to ARTICLE.title
+    return Articles.find({ title: { $regex: queryValue, $options: 'i' } }).fetch();
+    break;
+    case 'brain_region':
+    //search REGION db for matching region
+    //if found, connect to ARTICLE db
+    //if not found, create new REGION
+    return Regions.find({ name: { $regex: queryValue, $options: 'i' } }).fetch();
+    break;
+    case 'parent_region':
+    //search REGION db for matching region
+    //if found, connect to REGION as parent relationship
+    //if not found, connect to REGION as parent AND create new REGION
+    return Regions.find({ name: { $regex: queryValue, $options: 'i' } }).fetch();
+    break;
+    case 'nomenclature':
+    return Nomenclatures.find({ name: { $regex: queryValue, $options: 'i' } }).fetch();
+    //search NOMENCLATURE db for matching (hard coded, manually updated)
+    break;
+    case 'species':
+    return Species.find({ name: { $regex: queryValue, $options: 'i' } }).fetch();
+    break;
+    case 'genetic_variant':
+    return Species.find({ genetic_variant: { $regex: queryValue, $options: 'i' } }).fetch();
+    break;
+    case 'phenomena':
+    return Phenomena.find({ name: { $regex: queryValue, $options: 'i' } }).fetch();
+    break;
+    case 'investigator': 
+    return Investigators.find({ name: { $regex: queryValue, $options: 'i' } }).fetch();
+    break;
+    case 'institution':
+    return Institutions.find({ name: { $regex: queryValue, $options: 'i' } }).fetch();
+    break;
 
-      }
+  }
+}
+
+function displayMatches(matching_field, val){
+  // Get value from form element
+  const unselected_matches = matching_field.find('.unselected_matches');
+  const selected_matches = matching_field.find('.selected_matches');
+  const type = matching_field.attr('name');
+
+  // Clear previous values
+  unselected_matches.empty();
+
+  //only search if non-empty
+  if(val === ''){
+
+  //if they delete the input value
+  //or it is emptied after being typed in
+
+  //if no selected_matches, then hide matching_field
+  if(selected_matches.is(':empty')){
+    matching_field.addClass('hidden');
+  }
+
+  }else{
+  //when a key is pressed, search the input for appropriate matches
+  const matches = findMatches(type, val);
+
+  if (matches.length > 0){
+
+    //unhide the matching_field
+    matching_field.removeClass('hidden');
+
+    //add input to appropriate container
+    for (var i in matches) {
+      unselected_matches.append('<span class="matching_item" name="'+type+'"">'+matches[i].name+'</span>');
     }
 
+  }
+
+}
+}
