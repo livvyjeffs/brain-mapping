@@ -279,15 +279,15 @@ function createNewNonNull(object, database){
 
   if(!object.matching && object.name != null){
   //only add if its a new, non-match
-    if(database.find({name: object.name}).fetch().length == 0){
+  if(database.find({name: object.name}).fetch().length == 0){
     //because of some redundancy, check that its not in db first
-      object.id = database.insert({
-        name: object.name,
-        createdAt: new Date(),
-      });
-    }
-    
+    object.id = database.insert({
+      name: object.name,
+      createdAt: new Date(),
+    });
   }
+
+}
 }
 
 function absorbData(values){
@@ -338,7 +338,11 @@ function absorbData(values){
           name: values.institution.name,
           id: values.institution.id,
         },
-      }
+      }, 
+      $set: {
+        brain_regions: values.brain_region.name,
+        phenomenas: values.phenomena.name,
+      }     
     });
   }else{
     //else create new article
@@ -346,6 +350,7 @@ function absorbData(values){
       url: [values.url.name],
       name: values.title.name,
       title: values.title.name,
+      brain_regions: values.brain_region.name,
       brain_region: [{
         name: values.brain_region.name,
         id: values.brain_region.id,
@@ -356,6 +361,7 @@ function absorbData(values){
         name: values.nomenclature.name,
         id: values.nomenclature.id,
       }],
+      phenomenas: values.phenomena.name,
       phenomena: [{
         name: values.phenomena.name,
         id: values.phenomena.id,
