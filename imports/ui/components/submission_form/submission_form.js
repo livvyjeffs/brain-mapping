@@ -87,60 +87,51 @@ Template.submission_form.events({
     // Prevent default browser form submit
     event.preventDefault();
 
+    const values = {};
+
     //Get value from each form element
     $('form .input_container').each(function(){
 
+      console.log(values);
+
+      const matching_container = $(this);
+      const type = $(this).attr('name');
+      const matching_field = matching_container.find('.matching_field');
+      const input_field = matching_container.find(':input');
+      const unselected_matches = matching_field.find('.unselected_matches');
+      const selected_matches = matching_field.find('.selected_matches');
+      const matching_item = selected_matches.find('.matching_item');
+
+      //right now only one-to-one
+      if(matching_item.length > 0){
+        values[type] = {
+          matching: true,
+          value: matching_item.text()
+        };
+      }else{
+        
+        const val = input_field.val();
+        values[type] = {
+          matching: false,
+          value: val
+        };
+
+      }
+
+      //empty form
+      input_field.val('');
+      unselected_matches.empty().addClass('hidden');
+      selected_matches.empty();
+      matching_field.addClass('hidden');
+
     });
 
-    const url = getValues($('.new-search [name=url]'));
-    const title = $('.new-article [name=title]').val();
-    const brain_region = $('.new-article [name=brain_region]').val();
-    const parent_region = $('.new-article [name=parent_region]').val();
-    const nomenclature = $('.new-article [name=nomenclature]').val();
-    const species = $('.new-article [name=species]').val();
-    const genetic_variant = $('.new-article [name=genetic_variant]').val();
-    const phenomena = $('.new-article [name=phenomena]').val();
-    const investigator = $('.new-article [name=investigator]').val();
-    const institution = $('.new-article [name=institution]').val();
+    absorbData(values);
 
-    // Insert an article into the collection
-    Articles.insert({
-      name: title,
-      url,
-      brain_region,
-      parent_region,
-      nomenclature,
-      phenomena,
-      species,
-      title,
-      investigator,
-      institution,
-      createdAt: new Date(), // current time
-    });
 
-    //work on form submissions
-
-    Phenomena.insert({
-      name: phenomena,
-      createdAt: new Date(), // current time
-    });
-
-    Regions.insert({
-      name: brain_region,
-      parent_region,
-      createdAt: new Date(), //current time
-    });
-
-    Regions.insert({
-      name: species,
-      genetic_variant,
-      createdAt: new Date(), //current time
-    });
-
+    //Hide form (already cleared earlier)
     $('.new-article').addClass('hidden');
 
-    // Clear form
-    $('.new-article input').val('');
   },
 
   "keyup .new-article input": function(event, template) {
@@ -172,25 +163,12 @@ Template.submission_form.events({
   const selected_matches = matching_field.find('.selected_matches');
 
   //remove the element from unselected and move to selected
-  selected_matches.append(matching_item.remove());
-  
-  //search for no matches
-  console.log(input_field);
+  //clear input field
+  selected_matches.removeClass('hidden').append(matching_item.remove());
   input_field.val('');
+
+  //search for no matches
   displayMatches(matching_field, input_field.val());
-
-  // //move the item from unselected to selected and empty other options
-  // const matched_item = $(target).text();
-  // $(target).remove();
-  // $(input_container).find('.unselected_matches').empty();
-  // $(input_container).find('.selected_matches').removeClass('hidden').append("<span class='match_item'>"+matched_item+"<span>");
-  // $(input_container).find('.unselected_matches').addClass('hidden'); 
-
-  // //bind selected item to appropriate db
-  // //example: users.update({_id : "Jack"},{$set:{age : 13, username : "Jack"}});
-
-  // //clear input
-  // $(input_container).find(':input').val('');
 
 },
 
@@ -281,10 +259,72 @@ function displayMatches(matching_field, val){
 
     //add input to appropriate container
     for (var i in matches) {
-      unselected_matches.append('<span class="matching_item" name="'+type+'"">'+matches[i].name+'</span>');
+      unselected_matches.append('<span class="matching_item" name="'+type+'">'+matches[i].name+'</span>');
     }
 
   }
 
 }
+}
+
+function absorbValues(values){
+
+  if(values['title'])
+
+  // Insert an article into the collection
+    Articles.insert({
+      name: values['title'],
+      url: values['url'],
+      title: values['title'],
+      brain_region: values['brain_region'],
+      parent_region: values['parent_region'],
+      nomenclature: values['nomeclature'],
+      phenomena: values['phenomena'],
+      species: values['species'],
+      genetic_variant: values['genetic_variant'],
+      investigator: values['investigator'],
+      institution: values['institution'],
+      createdAt: new Date(), // current time
+    });
+
+        //insert into relevant db if new item
+        //assuming one-to-one
+        switch (type){
+          case 'brain_region':
+          Regions.insert({
+            name: val,
+            createdAt: new Date(),
+          });
+          break;
+          case 'parent_region':
+          Regions.insert({
+            name: val,
+            createdAt: new Date(),
+          });
+          break;
+          case 'phenomena':
+          Phenomena.insert({
+            name: val,
+            createdAt: new Date(),
+          });
+          break;
+          case 'investigator':
+          Investigators.insert({
+            name: val,
+            createdAt: new Date(),
+          });
+          break;
+          case 'institution':
+          Institutions.insert({
+            name: val,
+            createdAt: new Date(),
+          });
+          break;
+          case 'species':
+          Species.insert({
+            name: val,
+            createdAt: new Date(),
+          });
+          break;
+        }
 }

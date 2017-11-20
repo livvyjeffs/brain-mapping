@@ -165,7 +165,7 @@ header .hide-completed {
 }
 
 .matching_item{
- padding: 3px 5px;
+ padding: 3px 5px 3px 0;
  margin-right: 3px;
 }
 
@@ -176,4 +176,5 @@ header .hide-completed {
 .selected_matches .matching_item{
   border-radius: 2px;
   border: 1px solid green;
+  padding: 3px 5px;
 }

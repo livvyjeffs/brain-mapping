@@ -2,7 +2,7 @@
 	<header>
 		<h1>Article List</h1>
 		<form class="new-search">
-			<div class="input_container">
+			<div class="input_container" name="url">
 				<input type="text" name="url" placeholder="Enter the URL" />
 			</div>
 		</form>
@@ -20,7 +20,7 @@
 	<div class="input_container" name={{name}}>
 		<input type="text" name="{{name}}" placeholder="{{placeholder}}" />
 		<div class="matching_field hidden" name={{name}}>
-			<div class="selected_matches"></div>
+			<div class="selected_matches hidden"></div>
 			<div class="unselected_matches">
 			</div>
 		</div>
