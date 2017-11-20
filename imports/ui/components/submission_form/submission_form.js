@@ -6,7 +6,7 @@ import { Articles } from '/imports/api/articles/articles.js';
 import { Fields } from '/imports/api/articles/articles.js';
 import { Regions } from '/imports/api/articles/articles.js';
 import { Nomenclatures } from '/imports/api/articles/articles.js';
-import { Pheonomena } from '/imports/api/articles/articles.js';
+import { Phenomena } from '/imports/api/articles/articles.js';
 import { Species } from '/imports/api/articles/articles.js';
 import { Investigators } from '/imports/api/articles/articles.js';
 import { Institutions } from '/imports/api/articles/articles.js';
@@ -92,8 +92,6 @@ Template.submission_form.events({
     //Get value from each form element
     $('form .input_container').each(function(){
 
-      console.log(values);
-
       const matching_container = $(this);
       const type = $(this).attr('name');
       const matching_field = matching_container.find('.matching_field');
@@ -101,33 +99,43 @@ Template.submission_form.events({
       const unselected_matches = matching_field.find('.unselected_matches');
       const selected_matches = matching_field.find('.selected_matches');
       const matching_item = selected_matches.find('.matching_item');
+      const val = input_field.val();
 
       //right now only one-to-one
-      if(matching_item.length > 0){
-        values[type] = {
-          matching: true,
-          value: matching_item.text()
-        };
-      }else{
-        
-        const val = input_field.val();
+      if(val != ''){
+        //if empty
         values[type] = {
           matching: false,
-          value: val
+          name: val,
+          type: type,
         };
-
+      }else if(matching_item.length > 0){
+        //if matching
+        values[type] = {
+          matching: true,
+          name: matching_item.text(),
+          id: matching_item.attr('id'),
+          type: type,
+        };
+      }else{
+        //if new
+        values[type] = {
+          matching: false,
+          name: null,
+          type: type,
+        };
       }
 
       //empty form
       input_field.val('');
-      unselected_matches.empty().addClass('hidden');
-      selected_matches.empty();
+      unselected_matches.empty();
+      selected_matches.empty().addClass('hidden');
       matching_field.addClass('hidden');
 
     });
 
+    // Meteor.call('articles.insert', values);
     absorbData(values);
-
 
     //Hide form (already cleared earlier)
     $('.new-article').addClass('hidden');
@@ -248,7 +256,7 @@ function displayMatches(matching_field, val){
     matching_field.addClass('hidden');
   }
 
-  }else{
+}else{
   //when a key is pressed, search the input for appropriate matches
   const matches = findMatches(type, val);
 
@@ -259,7 +267,7 @@ function displayMatches(matching_field, val){
 
     //add input to appropriate container
     for (var i in matches) {
-      unselected_matches.append('<span class="matching_item" name="'+type+'">'+matches[i].name+'</span>');
+      unselected_matches.append('<span class="matching_item" name="'+type+'" id="'+matches[i]._id+'">'+matches[i].name+'</span>');
     }
 
   }
@@ -267,64 +275,106 @@ function displayMatches(matching_field, val){
 }
 }
 
-function absorbValues(values){
+function createNewNonNull(object, database){
 
-  if(values['title'])
-
-  // Insert an article into the collection
-    Articles.insert({
-      name: values['title'],
-      url: values['url'],
-      title: values['title'],
-      brain_region: values['brain_region'],
-      parent_region: values['parent_region'],
-      nomenclature: values['nomeclature'],
-      phenomena: values['phenomena'],
-      species: values['species'],
-      genetic_variant: values['genetic_variant'],
-      investigator: values['investigator'],
-      institution: values['institution'],
-      createdAt: new Date(), // current time
-    });
-
-        //insert into relevant db if new item
-        //assuming one-to-one
-        switch (type){
-          case 'brain_region':
-          Regions.insert({
-            name: val,
-            createdAt: new Date(),
-          });
-          break;
-          case 'parent_region':
-          Regions.insert({
-            name: val,
-            createdAt: new Date(),
-          });
-          break;
-          case 'phenomena':
-          Phenomena.insert({
-            name: val,
-            createdAt: new Date(),
-          });
-          break;
-          case 'investigator':
-          Investigators.insert({
-            name: val,
-            createdAt: new Date(),
-          });
-          break;
-          case 'institution':
-          Institutions.insert({
-            name: val,
-            createdAt: new Date(),
-          });
-          break;
-          case 'species':
-          Species.insert({
-            name: val,
-            createdAt: new Date(),
-          });
-          break;
-        }
+  if(!object.matching && object.name != null){
+  //only add if its a new, non-match
+    if(database.find({name: object.name}).fetch().length == 0){
+    //because of some redundancy, check that its not in db first
+      object.id = database.insert({
+        name: object.name,
+        createdAt: new Date(),
+      });
+    }
+    
+  }
 }
+
+function absorbData(values){
+
+  //createNewNonNull upstream ids
+
+  createNewNonNull(values.parent_region, Regions);
+  createNewNonNull(values.brain_region, Regions);
+  createNewNonNull(values.phenomena, Phenomena);
+  createNewNonNull(values.species, Species);
+  createNewNonNull(values.investigator, Investigators);
+  createNewNonNull(values.nomenclature, Nomenclatures);
+  createNewNonNull(values.institution, Institutions);
+
+  console.log(values)
+
+  if(values.title.matching){
+    //if matching an existing article
+  }
+
+  Articles.insert({
+    url: values.url.name,
+    name: values.title.name,
+    title: values.title.name,
+    brain_region: {
+      name: values.brain_region.name,
+      id: values.brain_region.id,
+      parent_region: values.parent_region.name,
+      type: 'brain_region',
+    },
+    nomenclature: {
+      name: values.nomenclature.name,
+      id: values.nomenclature.id,
+    },
+    phenomena: {
+      name: values.phenomena.name,
+      id: values.phenomena.id,
+    },
+    species: {
+      name: values.species.name,
+      id: values.species.id,
+      genetic_variant: values.genetic_variant.name,
+      type: 'species',
+    },
+    investigators: {
+      name: values.investigator.name,
+      id: values.investigator.id,
+    },
+    institution: {
+      name: values.institution.name,
+      id: values.institution.id,
+    },
+    createdAt: new Date(),
+  });
+
+  // Articles.update({
+  //   query: { name: values.title },
+  //   update: { 
+
+  //   },
+  //   upsert: true
+  // });
+
+  // Regions.findAndModify({
+  //   query: { name : values[brain_region] },
+  //   update: {
+  //     $addToSet: {
+  //       parent_region: values[parent_region]
+  //     }
+  //   },
+  //   upsert: true
+  // });
+
+  // Phenomena.findAndModify({
+  //   query: { name : values[phenomena] },
+  //   upsert: true
+  // });
+
+  // Institutions.findAndModify({
+  //   query: { name : values[institution] },
+  //   upsert: true
+  // });
+
+  // Investigators.findAndModify({
+  //   query: { name : values[investigators] },
+  //   upsert: true
+  // });
+
+}
+

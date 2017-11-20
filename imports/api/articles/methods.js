@@ -13,14 +13,14 @@ import { Institutions } from './articles.js';
 import { Fields } from './articles.js';
 
 Meteor.methods({
-	'articles.insert'(title, url) {
+	'regions.insert'(name, parent) {
 
-		check(url, String);
-		check(title, String);
+		check(name, String);
+		check(parent, String);
 
-		return Articles.insert({
-			url,
-			title,
+		return Regions.insert({
+			name,
+			parent_region: parent,
 			createdAt: new Date(),
 		});
 	},
