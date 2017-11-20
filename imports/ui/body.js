@@ -1,3 +1,5 @@
+import { Session } from 'meteor/session';
+
 import { Template } from 'meteor/templating';
 
 import { Articles } from '../api/articles.js';
@@ -97,8 +99,24 @@ Template.body.events({
     // Prevent default browser form submit
     event.preventDefault();
 
-    // Get value from form element
-    const url = $('.new-search [name=url]').val();
+    //Get value from each form element
+    $('form .input_container').each(function(){
+
+      //if has selected matches, update corresponding dbs
+      if($(this).has('.selected_matches > .match_item')){
+
+      }
+
+      //else simply add new
+      Session.set({
+        $(this).find(':input').attr('name'),
+        $(this).find(':input').val()
+      });
+
+
+    });
+
+    const url = getValues($('.new-search [name=url]'));
     const title = $('.new-article [name=title]').val();
     const brain_region = $('.new-article [name=brain_region]').val();
     const parent_region = $('.new-article [name=parent_region]').val();
@@ -109,7 +127,7 @@ Template.body.events({
     const investigator = $('.new-article [name=investigator]').val();
     const institution = $('.new-article [name=institution]').val();
 
-    // Insert a task into the collection
+    // Insert an article into the collection
     Articles.insert({
       name: title,
       url,
@@ -179,15 +197,19 @@ Template.body.events({
   event.preventDefault();
   // Session.set('affiliation_parent', AffiliationList.findOne({name: getSelectedValue(event)}))
 
+  //define object targets according to html code
   const target = event.target;
   const input_container = target.parentNode.parentNode.parentNode;
 
-  //add detached matched item
+  //move the item from unselected to selected and empty other options
   const matched_item = $(target).text();
   $(target).remove();
   $(input_container).find('.unselected_matches').empty();
   $(input_container).find('.selected_matches').removeClass('hidden').append("<span class='match_item'>"+matched_item+"<span>");
   $(input_container).find('.unselected_matches').addClass('hidden'); 
+
+  //bind selected item to appropriate db
+  //example: users.update({_id : "Jack"},{$set:{age : 13, username : "Jack"}});
 
   //clear input
   $(input_container).find(':input').val('');
@@ -202,5 +224,19 @@ function getSelectedValue(event){
   return event.target.getAttribute('value');
 }
 
+function getValues(target){
+
+  const input_container = $(target).parent();
+  const json = {};
+
+  json
+
+
+
+  //objects will always be inputs
+  alert('called')
+  return 'lala';
+
+}
 
 

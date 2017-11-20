@@ -1,2 +1,4 @@
-import '../imports/ui/body.js';
+// Client entry point, imports all client code
 
+import '/imports/startup/client';
+import '/imports/startup/both';

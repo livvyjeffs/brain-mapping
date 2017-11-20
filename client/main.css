@@ -115,11 +115,24 @@ header .hide-completed {
   }
 }
 
+.map_iframe_container{
+  position: absolute;
+  top: 0;
+  right: 50%;
+  left: 0;
+  bottom: 75%;
+}
+
+.map_iframe{
+  width: 100%;
+  height: 100%;
+}
+
 .iframe_container{
   position: absolute;
   left: 0;
   right: 50%;
-  top: 0;
+  top: 25%;
   bottom: 0;
   background: white;
 }
