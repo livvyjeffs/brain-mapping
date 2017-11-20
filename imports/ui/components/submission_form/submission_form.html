@@ -8,17 +8,7 @@
 		</form>
 		<form class="new-article hidden">
 			{{#each input_fields}}
-			<div class="input_container">
-				{{> input_field}}
-				<div class="matching">
-					<div class="selected_matches hidden"></div>
-					<div class="unselected_matches hidden">
-						{{#each matching_fields}}
-						{{> matching_field}}
-						{{/each}}
-					</div>
-				</div>
-			</div>
+			{{> input_field}}
 			{{/each}}
 			<input type="submit">
 		</form>
@@ -26,9 +16,22 @@
 </template>
 
 <template name="input_field">
-	<input type="text" name="{{name}}" placeholder="{{placeholder}}" />
+	<div class="input_container" name={{name}}>
+		<input type="text" name="{{name}}" placeholder="{{placeholder}}" />
+		<div class="matching" name={{name}}>
+			<div class="selected_matches hidden" name={{name}}></div>
+			<div class="unselected_matches hidden">
+			</div>
+		</div>
+	</div>
 </template>
 
+<!-- below, not in use -->
+
 <template name="matching_field">
-	<span class="match_item" db="{{queryType}}">{{name}}</span>
+	
+</template>
+
+<template name="matching_item">
+	<span class="match_item">{{name}}</span>
 </template>

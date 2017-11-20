@@ -22,4 +22,5 @@ export const Nomenclatures = new Mongo.Collection('nomenclatures');
 //unique institutions, connected to PIs
 export const Institutions = new Mongo.Collection('institutions');
 
+//form fields for submission
 export const Fields = new Mongo.Collection('fields');
