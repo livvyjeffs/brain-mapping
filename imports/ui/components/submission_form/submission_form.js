@@ -340,8 +340,9 @@ function absorbData(values){
         },
       }, 
       $set: {
-        brain_regions: values.brain_region.name,
-        phenomenas: values.phenomena.name,
+        //changes the display value to most recent
+        display_brain_region: values.brain_region.name,
+        display_phenomena: values.phenomena.name,
       }     
     });
   }else{
