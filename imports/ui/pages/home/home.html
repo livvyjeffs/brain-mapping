@@ -1,4 +1,21 @@
 <template name="App_home">
-  {{> hello}}
-  {{> info}}
+	
+	<div id="left_screen_container">
+
+		{{> article_viewer}}
+
+	</div>
+
+	<div id="right_screen_container">
+
+		<div class="article_list_container">
+
+			{{> submission_form}}
+			
+			{{> list_viewer}}
+
+		</div>
+
+	</div>
+
 </template>

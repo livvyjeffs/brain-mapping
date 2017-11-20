@@ -1,26 +1,44 @@
+import './submission_form.html';
+
+// Template.submission_form.onCreated(function helloOnCreated() {
+//   // counter starts at 0
+//   this.counter = new ReactiveVar(0);
+// });
+
+// Template.submission_form.helpers({
+//   counter() {
+//     return Template.instance().counter.get();
+//   },
+// });
+
+// Template.submission_form.events({
+//   'click button'(event, instance) {
+//     // increment the counter when button is clicked
+//     instance.counter.set(instance.counter.get() + 1);
+//   },
+// });
+
 import { Session } from 'meteor/session';
 
 import { Template } from 'meteor/templating';
 
-import { Articles } from '/imports/api/articles.js';
+import { Articles } from '/imports/api/articles/articles.js';
 
-import { Regions } from '/imports/api/articles.js';
+import { Regions } from '/imports/api/articles/articles.js';
 
-import { Nomenclatures } from '/imports/api/articles.js';
+import { Nomenclatures } from '/imports/api/articles/articles.js';
 
-import { Species } from '/imports/api/articles.js';
+import { Species } from '/imports/api/articles/articles.js';
 
-import { Phenomena } from '/imports/api/articles.js';
+import { Phenomena } from '/imports/api/articles/articles.js';
 
-import { Investigators } from '/imports/api/articles.js';
+import { Investigators } from '/imports/api/articles/articles.js';
 
-import { Institutions } from '/imports/api/articles.js';
+import { Institutions } from '/imports/api/articles/articles.js';
 
-import { Fields } from '/imports/api/articles.js';
+import { Fields } from '/imports/api/articles/articles.js';
 
-import './body.html';
-
-Template.body.helpers({
+Template.submission_form.helpers({
   input_fields(){
     return Fields.find({});
     // return Fields.find({}, {sort: {order: 1}});
@@ -82,7 +100,7 @@ Template.body.helpers({
   },
 });
 
-Template.body.events({
+Template.submission_form.events({
   'submit .new-search'(event) {
     // Prevent default browser form submit
     event.preventDefault();
@@ -108,10 +126,10 @@ Template.body.events({
       }
 
       //else simply add new
-      Session.set({
-        $(this).find(':input').attr('name'),
-        $(this).find(':input').val()
-      });
+      // Session.set({
+      //   $(this).find(':input').attr('name'),
+      //   $(this).find(':input').val()
+      // });
 
 
     });
@@ -222,21 +240,6 @@ function getSelectedValue(event){
   $('.matching').removeClass('selected');
   $(event.target).addClass('selected');
   return event.target.getAttribute('value');
-}
-
-function getValues(target){
-
-  const input_container = $(target).parent();
-  const json = {};
-
-  json
-
-
-
-  //objects will always be inputs
-  alert('called')
-  return 'lala';
-
 }
 
 

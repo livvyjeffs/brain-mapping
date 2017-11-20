@@ -1,0 +1,11 @@
+<template name="list_viewer">
+  <ul>
+    {{#each articles}}
+    {{> article}}
+    {{/each}}
+  </ul>
+</template>
+
+<template name="article">
+  <li>{{brain_region}}, {{phenomena}}, <a href="{{url}}">{{title}}</a></li>
+</template>

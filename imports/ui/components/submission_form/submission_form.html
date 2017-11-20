@@ -1,0 +1,34 @@
+<template name="submission_form">
+	<header>
+		<h1>Article List</h1>
+		<form class="new-search">
+			<div class="input_container">
+				<input type="text" name="url" placeholder="Enter the URL" />
+			</div>
+		</form>
+		<form class="new-article hidden">
+			{{#each input_fields}}
+			<div class="input_container">
+				{{> input_field}}
+				<div class="matching">
+					<div class="selected_matches hidden"></div>
+					<div class="unselected_matches hidden">
+						{{#each matching_fields}}
+						{{> matching_field}}
+						{{/each}}
+					</div>
+				</div>
+			</div>
+			{{/each}}
+			<input type="submit">
+		</form>
+	</header>
+</template>
+
+<template name="input_field">
+	<input type="text" name="{{name}}" placeholder="{{placeholder}}" />
+</template>
+
+<template name="matching_field">
+	<span class="match_item" db="{{queryType}}">{{name}}</span>
+</template>
