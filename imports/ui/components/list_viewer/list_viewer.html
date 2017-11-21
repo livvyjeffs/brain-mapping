@@ -1,33 +1,95 @@
 <template name="list_viewer">
 	<table>
-		<tr>
-			<th>Brain Regions</th>
-			<th>Phenomena</th>
-			<th>Research Paper</th>
-		</tr>
-		{{#each articles}}
-		{{> article}}
-		{{/each}}
+
+		{{> Template.dynamic template=list_view}}
+
 	</table>
 	
 </template>
 
-<template name="article">
+<!-- ARTICLE -->
+
+<template name="by_article">
 	<tr>
-		<td>{{> brain_regionList brain_region}}</td>
-		<td>{{> phenomenaList phenomena}}</td>
+		<th class="view_toggle" name="by_brain_region">Brain Regions</th>
+		<th class="view_toggle" name="by_phenomena">Phenomena</th>
+		<th class="view_toggle" name="by_article">Research Paper*</th>
+	</tr>
+	{{#each articles}}
+	<tr>
+		<td>{{> subList brain_region}}</td>
+		<td>{{> subList phenomena}}</td>
 		<td><a href="{{url}}">{{title}}</a></td>
 	</tr>
+	{{/each}}
 </template>
 
-<template name="brain_regionList">
+<!-- PHENOMENA -->
+
+<template name="by_phenomena">
+	<tr>
+		<th class="view_toggle" name="by_phenomena">Phenomena*</th>
+		<th>
+			<table class="sub_table">
+				<th class="view_toggle" name="by_brain_region">Brain Regions</th>
+				<th class="view_toggle" name="by_article">Research Paper</th>
+			</table>
+		</th>
+	</tr>
+	{{#each phenomena}}
+	<tr>
+		<td>{{name}}</td>
+		<table class="sub_table">
+			{{> subList_by_phenomena articles}}
+		</table>
+	</tr>
+	{{/each}}
+</template>
+
+<!-- BRAIN REGION -->
+
+<template name="by_brain_region">
+	<tr>
+		<th class="view_toggle" name="by_brain_region">Brain Region*</th>
+		<th>
+			<table class="sub_table">
+				<th class="view_toggle" name="by_phenomena">Phenomena</th>
+				<th class="view_toggle" name="by_article">Research Paper</th>
+			</table>
+		</th>
+	</tr>
+	{{#each brain_regions}}
+	<tr>
+		<td>{{name}}</td>
+		<table class="sub_table">
+			{{> subList_by_brain_region articles}}
+		</table>
+	</tr>
+	{{/each}}
+</template>
+
+<!-- SUB LISTS -->
+
+<template name="subList">
 	{{#each this}}
 	{{name}}<br>
 	{{/each}}
 </template>
 
-<template name="phenomenaList">
+<template name="subList_by_phenomena">
 	{{#each this}}
-	{{name}}<br>
+	<tr>
+		<td>{{> subList brain_region}}</td>
+		<td><a href="{{url}}">{{title}}</a></td>
+	</tr>
+	{{/each}}
+</template>
+
+<template name="subList_by_brain_region">
+	{{#each this}}
+	<tr>
+		<td>{{> subList phenomena}}</td>
+		<td><a href="{{url}}">{{title}}</a></td>
+	</tr>
 	{{/each}}
 </template>

@@ -23,6 +23,10 @@ Meteor.publish('fields.all', function () {
   return Fields.find();
 });
 
+Meteor.publish('phenomena.all', function () {
+  return Phenomena.find();
+});
+
 Meteor.publish('regions.all', function () {
   return Regions.find();
 });

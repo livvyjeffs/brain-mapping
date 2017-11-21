@@ -275,7 +275,7 @@ function displayMatches(matching_field, val){
 }
 }
 
-function createNewNonNull(object, database){
+function createNewNonNull(object, database, values){
 
   if(!object.matching && object.name != null){
   //only add if its a new, non-match
@@ -284,6 +284,10 @@ function createNewNonNull(object, database){
     object.id = database.insert({
       name: object.name,
       createdAt: new Date(),
+      articles: [{
+        title: values.title.name,
+        url: values.url.name,
+      }],
     });
   }
 
@@ -294,15 +298,15 @@ function absorbData(values){
 
   //createNewNonNull upstream ids
 
-  createNewNonNull(values.parent_region, Regions);
-  createNewNonNull(values.brain_region, Regions);
-  createNewNonNull(values.phenomena, Phenomena);
-  createNewNonNull(values.species, Species);
-  createNewNonNull(values.investigator, Investigators);
-  createNewNonNull(values.nomenclature, Nomenclatures);
-  createNewNonNull(values.institution, Institutions);
+  createNewNonNull(values.parent_region, Regions, values);
+  createNewNonNull(values.brain_region, Regions, values);
+  createNewNonNull(values.phenomena, Phenomena, values);
+  createNewNonNull(values.species, Species, values);
+  createNewNonNull(values.investigator, Investigators, values);
+  createNewNonNull(values.nomenclature, Nomenclatures, values);
+  createNewNonNull(values.institution, Institutions, values);
 
-  console.log(values)
+  // console.log(values)
 
   if(values.title.matching){
     //if matching an existing article

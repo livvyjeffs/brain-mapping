@@ -59,6 +59,15 @@ ul, table {
   background: white;
 }
 
+.sub_table tr{
+  border-bottom: none;
+}
+
+.view_toggle:hover{
+  cursor: pointer;
+  text-decoration: underline;
+}
+
 th, td{
   padding: 10px;
 }
