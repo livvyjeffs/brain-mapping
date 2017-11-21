@@ -77,12 +77,14 @@ Template.by_brain_region.helpers({
 	brain_regions(){
 
 		const brain_regions = Regions.find({}).fetch();
-		console.log(brain_regions)
 
-		for (x in brain_regions){
+		for (var x in brain_regions){
 			brain_regions[x].articles = Articles.find({'brain_region.id': brain_regions[x]._id}).fetch();
+		}
+
+		for (var x in brain_regions){
 			if (brain_regions[x].articles.length === 0){
-				//remove if no articles
+				//remove if no articles b/c its a parent region
 				brain_regions.splice(x,1);
 			}
 		}
