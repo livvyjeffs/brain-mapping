@@ -153,9 +153,13 @@ header .hide-completed {
   left: 0;
   bottom: 0;
   right: 0;
-  background-color: darkgray;
+  background-color: rgba(39,40,34,1);
   color: whitesmoke;
-  padding: 20px 30px;
+  padding: 15px 20px;
+}
+
+.instruction_box a{
+  color: rgba(96,210,232,1);
 }
 
 .article_iframe_container{
