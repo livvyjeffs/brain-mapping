@@ -55,6 +55,7 @@ Template.list_viewer.helpers({
 
 Template.by_article.helpers({
 	articles() {
+		// http://www.curtismlarson.com/blog/2015/08/08/meteor-mongodb-array-property-selector/
 		return Articles.find({});
 	},
 });
